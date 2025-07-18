@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alfonsovidrio.springboot.app.springboot_crud.entities.User;
 import com.alfonsovidrio.springboot.app.springboot_crud.services.UserService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 
@@ -43,6 +44,7 @@ public class UserController {
     
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> create(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasFieldErrors()) return validation(result);
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));

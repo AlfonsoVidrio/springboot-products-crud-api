@@ -24,6 +24,7 @@ import com.alfonsovidrio.springboot.app.springboot_crud.entities.Product;
 import com.alfonsovidrio.springboot.app.springboot_crud.services.ProductService;
 // import com.alfonsovidrio.springboot.app.springboot_crud.validation.ProductValidation;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "https://localhost:3000", originPatterns = "*")
@@ -37,12 +38,14 @@ public class ProductController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @SecurityRequirement(name = "bearer-key")
     public List<Product> list() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> view(@PathVariable Long id) {
         return service.findById(id)
                 .map(ResponseEntity::ok)
@@ -51,6 +54,7 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> create(@Valid @RequestBody Product product, BindingResult result) {
         // validation.validate(product, result);
         if (result.hasFieldErrors()) return validation(result);
@@ -61,6 +65,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> update(@Valid @RequestBody Product product, BindingResult result, @PathVariable Long id) {
         // validation.validate(product, result);
         if (result.hasFieldErrors()) return validation(result);
@@ -74,6 +79,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SecurityRequirement(name = "bearer-key")
     public ResponseEntity<?> delete(@PathVariable Long id) {
 
 
